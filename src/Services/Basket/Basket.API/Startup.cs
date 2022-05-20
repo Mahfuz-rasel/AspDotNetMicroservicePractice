@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Basket.API.Repositories;
 
 namespace Basket.API
 {
@@ -25,7 +26,11 @@ namespace Basket.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddStackExchangeRedisCache(option =>
+                {
+                    option.Configuration = Configuration.GetValue<string>("CacheSetting:ConnectionString");
+                });
+            services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
